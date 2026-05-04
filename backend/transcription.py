@@ -4,6 +4,7 @@ Uses OpenAI API format, compatible with Ollama, OpenAI, LM Studio, and other pro
 Configuration is loaded from .env file.
 """
 
+import os
 from pathlib import Path
 
 from faster_whisper import WhisperModel
@@ -43,7 +44,10 @@ class TranscriptionService:
         print("🔄 Transcribing...")
 
         segments, info = self.whisper.transcribe(
-            audio_file, beam_size=5, language="en", condition_on_previous_text=False
+            audio_file,
+            beam_size=5,
+            language=os.getenv("WHISPER_LANGUAGE", None),
+            condition_on_previous_text=False,
         )
 
         text = " ".join([segment.text for segment in segments]).strip()
