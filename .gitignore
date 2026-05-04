@@ -64,3 +64,4 @@ STUDENT_PROFILE.md
 exercise/STUDENT_PROFILE.md
 exercise/python/*.py
 exercise/typescript/*.ts
+.devcontainer/devcontainer-lock.json
