@@ -11,7 +11,7 @@ from faster_whisper import WhisperModel
 from openai import OpenAI
 
 # Edit system_prompt.txt to change how the LLM cleans transcriptions
-PROMPT_FILE = Path(__file__).parent / "system_prompt.txt"
+PROMPT_FILE = Path(__file__).parent / "system_prompt_hr.txt"
 SYSTEM_PROMPT = PROMPT_FILE.read_text().strip()
 
 
