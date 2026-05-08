@@ -11,13 +11,13 @@ AI-powered voice transcription with Whisper and LLM cleaning. Browser-based reco
 
 This repository uses checkpoint branches to progressively teach AI engineering concepts:
 
-| Branch | Description | Builds On | Learning Resource |
-|--------|-------------|-----------|-------------------|
-| `main` | Complete transcript app with Whisper + LLM cleaning (runs fully locally, beginner friendly) | — | [YouTube Tutorial](https://youtu.be/WUo5tKg2lnE) |
-| `checkpoint-1-fundamentals` | Exercise generation system for learning Python/TypeScript fundamentals | — | [Classroom](https://aiengineer.community/join) |
-| `checkpoint-agentic-openrouter` | Agentic workflow with autonomous tool selection | `main` | [Classroom](https://aiengineer.community/join) |
-| `checkpoint-pydanticai-openrouter` | PydanticAI framework for structured agent development | `checkpoint-agentic-openrouter` | [Classroom](https://aiengineer.community/join) |
-| `checkpoint-rest-mcp-openrouter` | MCP integration with REST API and GitHub Issues | `checkpoint-pydanticai-openrouter` | [Classroom](https://aiengineer.community/join) |
+| Branch                             | Description                                                                                 | Builds On                          | Learning Resource                                |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------ |
+| `main`                             | Complete transcript app with Whisper + LLM cleaning (runs fully locally, beginner friendly) | —                                  | [YouTube Tutorial](https://youtu.be/WUo5tKg2lnE) |
+| `checkpoint-1-fundamentals`        | Exercise generation system for learning Python/TypeScript fundamentals                      | —                                  | [Classroom](https://aiengineer.community/join)   |
+| `checkpoint-agentic-openrouter`    | Agentic workflow with autonomous tool selection                                             | `main`                             | [Classroom](https://aiengineer.community/join)   |
+| `checkpoint-pydanticai-openrouter` | PydanticAI framework for structured agent development                                       | `checkpoint-agentic-openrouter`    | [Classroom](https://aiengineer.community/join)   |
+| `checkpoint-rest-mcp-openrouter`   | MCP integration with REST API and GitHub Issues                                             | `checkpoint-pydanticai-openrouter` | [Classroom](https://aiengineer.community/join)   |
 
 > **Why "openrouter" in branch names?** These branches use [OpenRouter](https://openrouter.ai/) to access powerful cloud models that reliably support tool/function calling. Small local models struggle with agentic workflows.
 
@@ -174,6 +174,21 @@ To use a different provider, edit `backend/.env`:
 - `LLM_MODEL` - Model name
 
 ---
+
+## GPU Acceleration
+
+This project supports NVIDIA GPU acceleration for both transcription (Whisper) and LLM inference (Ollama).
+
+### Requirements
+
+- NVIDIA GPU with CUDA Compute Capability 7.0+ (RTX 20xx or newer)
+- NVIDIA Driver 12.x or later
+- Docker Desktop with WSL2 integration enabled for your distro
+
+### How it works
+
+- **Whisper**: automatically uses CUDA if available (`float16`), falls back to CPU (`int8`)
+- **Ollama**: uses GPU for LLM inference automatically
 
 ## Troubleshooting
 
