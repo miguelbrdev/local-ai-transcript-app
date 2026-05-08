@@ -1,14 +1,26 @@
 # Use official Python 3.12 image as base
-FROM python:3.12-slim-bookworm
+#FROM python:3.12-slim-bookworm
+
+FROM nvidia/cuda:12.8.1-cudnn-runtime-ubuntu24.04
+
+
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    libcublas12 \
+    libcublaslt12 \
+    python3.12 \
+    python3.12-dev \
+    python3-pip \
+    python3.12-venv \
     curl \
     ca-certificates \
     git \
     # Minimal build deps for Python packages
     gcc \
     libc6-dev \
+    && ln -sf /usr/bin/python3.12 /usr/bin/python \
+    && ln -sf /usr/bin/python3.12 /usr/bin/python3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 24 LTS
@@ -29,4 +41,12 @@ RUN python --version \
     && npm --version \
     && uv --version
 
-# Note: Non-root user is created by the common-utils feature in devcontainer.json
+# Create non-root 'vscode' user to match docker-compose `user`
+# If the user already exists this is a no-op.
+RUN if ! id -u vscode >/dev/null 2>&1; then \
+      groupadd -g 1000 vscode 2>/dev/null || true && \
+      useradd -m -u 1000 -g 1000 -s /bin/bash vscode 2>/dev/null || true; \
+    fi && \
+    mkdir -p /workspaces/ai-transcript-app && chown -R vscode:vscode /workspaces || true
+
+# Note: Previously the devcontainer common-utils feature created the non-root user.

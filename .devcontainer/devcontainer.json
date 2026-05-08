@@ -22,8 +22,9 @@
       "settings": {
         // Devcontainer-specific Python interpreter path
         "python.defaultInterpreterPath": "/workspaces/ai-transcript-app/backend/.venv/bin/python",
-        "python.terminal.activateEnvironment": true
+        "python.terminal.activateEnvironment": true,
         // Other settings are in .vscode/settings.json and apply automatically
+        "dev.containers.mountWaylandSocket": false
       }
     }
   },
@@ -68,7 +69,7 @@
       "version": "latest"
     }
   },
-  
+
   // In case Codespaces is used a decent machine is required for local AI
   "hostRequirements": {
     "cpus": 4,
