@@ -12,6 +12,7 @@ dependencies = [
     "python-multipart>=0.0.9",
     "openai>=1.0.0",
     "python-dotenv>=1.0.0",
+    "ctranslate2>=4.6.0",
 ]
 
 [project.optional-dependencies]

@@ -7,6 +7,7 @@ Configuration is loaded from .env file.
 import os
 from pathlib import Path
 
+import ctranslate2
 from faster_whisper import WhisperModel
 from openai import OpenAI
 
@@ -22,10 +23,13 @@ class TranscriptionService:
         self, whisper_model: str, llm_base_url: str, llm_api_key: str, llm_model: str
     ):
         print(f"🔄 Loading Whisper model '{whisper_model}'...")
+
+        [device, compute_type] = self._get_device_and_compute()
+        print(f"GPU disponible: {device}")
         self.whisper = WhisperModel(
             whisper_model,
-            device="auto",  # Auto-detect: Metal (Mac), CUDA (NVIDIA), or CPU
-            compute_type="int8",
+            device=device,  # Auto-detect: Metal (Mac), CUDA (NVIDIA), or CPU
+            compute_type=compute_type,
         )
         print(f"✅ Whisper model '{whisper_model}' loaded!")
 
@@ -56,6 +60,11 @@ class TranscriptionService:
 
     def get_default_system_prompt(self):
         return SYSTEM_PROMPT
+
+    def _get_device_and_compute(self) -> tuple[str, str]:
+        if ctranslate2.get_cuda_device_count() > 0:
+            return "cuda", "float16"
+        return "cpu", "int8"
 
     def clean_with_llm(self, text, system_prompt=None):
         if not text:
