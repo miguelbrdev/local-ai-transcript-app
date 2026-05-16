@@ -32,14 +32,14 @@ uv sync
 cd ..
 echo "✅ Python dependencies installed"
 
-echo "📦 Installing frontend dependencies with npm..."
+echo "📦 Installing frontend dependencies with pnpm..."
 cd frontend
-npm install
+pnpm install
 cd ..
 echo "✅ Frontend dependencies installed"
 
 echo "🔧 Installing TypeScript globally..."
-sudo npm install -g typescript@5.9.3
+sudo pnpm install -g typescript@5.9.3
 echo "✅ TypeScript installed globally"
 
 # Download Ollama model automatically
@@ -70,7 +70,7 @@ echo ""
 echo "📋 Installed versions:"
 echo "  Python: $(python --version)"
 echo "  Node.js: $(node --version)"
-echo "  npm: $(npm --version)"
+echo "  pnpm: $(pnpm --version)"
 echo "  TypeScript: $(tsc --version)"
 echo "  uv: $(uv --version)"
 echo "  Ollama: Running as Docker service at http://ollama:11434"
@@ -81,6 +81,6 @@ echo ""
 echo "📖 To start the app, open TWO terminals:"
 echo ""
 echo "  Terminal 1:  cd backend && uv run uvicorn app:app --reload --host 0.0.0.0 --port 8000"
-echo "  Terminal 2:  cd frontend && npm run dev"
+echo "  Terminal 2:  cd frontend && pnpm run dev"
 echo "  Browser:     http://localhost:3000"
 echo ""
