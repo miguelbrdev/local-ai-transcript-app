@@ -1,0 +1,24 @@
+Audio duration: 87.28s
+
+Loading model 'medium' on cpu (compute_type=int8) ...
+Warmup...
+cpu run 1/5: 2.82s
+cpu run 2/5: 2.99s
+cpu run 3/5: 2.75s
+cpu run 4/5: 2.78s
+cpu run 5/5: 2.73s
+
+Loading model 'medium' on cuda (compute_type=float16) ...
+Warmup...
+cuda run 1/5: 0.22s
+cuda run 2/5: 0.23s
+cuda run 3/5: 0.23s
+cuda run 4/5: 0.24s
+cuda run 5/5: 0.27s
+
+=== Summary ===
+CPU avg: 2.82s ±0.10s
+GPU avg: 0.24s ±0.02s
+Speedup (CPU / GPU): 11.89x  => GPU is 91.6% faster
+RTF (cpu): 0.032, RTF (gpu): 0.003 (lower is better)
+Acceleration (audio_duration/transcription_time): 31.00x (CPU), 368.60x (GPU)
