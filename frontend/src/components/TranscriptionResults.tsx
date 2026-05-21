@@ -1,12 +1,14 @@
-import { FileText, Sparkles } from 'lucide-react';
+import { FileText, Sparkles, MessageCircle } from 'lucide-react';
 import styles from './TranscriptionResults.module.css';
 import type { TranscriptionResultsProps } from '../types';
 import { TextBox } from './TextBox';
 import { Box } from './Box';
+import { DialogueView } from './DialogueView';
 
 export function TranscriptionResults({
   rawText,
   cleanedText,
+  dialogue,
   useLLM,
   isCopied,
   isCleaningWithLLM,
@@ -15,7 +17,6 @@ export function TranscriptionResults({
   onCopy,
   onToggleOriginalExpanded,
 }: TranscriptionResultsProps) {
-  // Show component if either processing or rawText exists
   if (!isProcessing && !rawText) {
     return null;
   }
@@ -40,7 +41,6 @@ export function TranscriptionResults({
         />
       </Box>
 
-      {/* Cleaned transcription (if LLM is enabled and cleaned text exists or is processing) */}
       {useLLM && (cleanedText || isCleaningWithLLM) && (
         <Box header="Cleaned Transcription" icon={Sparkles}>
           <TextBox
@@ -56,7 +56,6 @@ export function TranscriptionResults({
         </Box>
       )}
 
-      {/* Copy button for non-LLM case */}
       {!useLLM && displayText && (
         <TextBox
           mode="display"
@@ -67,6 +66,12 @@ export function TranscriptionResults({
           onCopy={() => onCopy(displayText)}
           maxHeight="300px"
         />
+      )}
+
+      {useLLM && (cleanedText || isCleaningWithLLM) && (
+        <Box header="Dialogue" icon={MessageCircle}>
+          <DialogueView dialogue={dialogue} isProcessing={isCleaningWithLLM} />
+        </Box>
       )}
     </div>
   );

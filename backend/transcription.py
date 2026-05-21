@@ -80,10 +80,13 @@ class TranscriptionService:
                 model=self.llm_model,
                 messages=[
                     {"role": "system", "content": prompt_to_use},
-                    {"role": "user", "content": text},
+                    {"role": "user", "content": f"<transcription>\n{text}\n</transcription>"},
                 ],
-                temperature=0.3,
-                max_tokens=200,
+                temperature=0.1,
+                max_tokens=2000,
+                frequency_penalty=1.0,
+                presence_penalty=0.5,
+                response_format={"type": "json_object"},
             )
 
             cleaned = response.choices[0].message.content.strip()

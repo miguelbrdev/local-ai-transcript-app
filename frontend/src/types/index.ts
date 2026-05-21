@@ -1,5 +1,10 @@
 export type RecordingState = 'idle' | 'recording' | 'processing';
 
+export interface DialogueEntry {
+  role: 'interviewer' | 'candidate';
+  text: string;
+}
+
 export interface AppState {
   isRecording: boolean;
   isProcessing: boolean;
@@ -62,6 +67,7 @@ export interface SettingsPanelProps {
 export interface TranscriptionResultsProps {
   rawText: string | null;
   cleanedText: string | null;
+  dialogue: DialogueEntry[] | null;
   useLLM: boolean;
   isCopied: boolean;
   isCleaningWithLLM: boolean;

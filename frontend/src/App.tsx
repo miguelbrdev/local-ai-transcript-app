@@ -8,6 +8,7 @@ import { SettingsPanel } from './components/SettingsPanel';
 import { TranscriptionResults } from './components/TranscriptionResults';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Footer } from './components/Footer';
+import type { DialogueEntry } from './types';
 
 interface TranscriptionResponse {
   success: boolean;
@@ -29,6 +30,7 @@ function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [rawText, setRawText] = useState<string | null>(null);
   const [cleanedText, setCleanedText] = useState<string | null>(null);
+  const [dialogue, setDialogue] = useState<DialogueEntry[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [useLLM, setUseLLM] = useState(true);
   const [isCopied, setIsCopied] = useState(false);
@@ -110,7 +112,20 @@ function App() {
           const cleanData = (await cleanResponse.json()) as CleanResponse;
 
           if (cleanData.success && cleanData.text) {
-            setCleanedText(cleanData.text);
+            try {
+              const cleaned = cleanData.text
+                .replace(/^```(?:json)?\s*|\s*```$/g, '')
+                .trim();
+              const parsed = JSON.parse(cleaned) as Record<string, unknown>;
+              if (Array.isArray(parsed.dialogue)) {
+                setDialogue(parsed.dialogue as DialogueEntry[]);
+              }
+              const { dialogue: _, ...rest } = parsed;
+              setCleanedText(JSON.stringify(rest, null, 2));
+            } catch {
+              setCleanedText(cleanData.text);
+              setDialogue(null);
+            }
           }
 
           setIsCleaningWithLLM(false);
@@ -148,6 +163,7 @@ function App() {
       setError(null);
       setRawText(null);
       setCleanedText(null);
+      setDialogue(null);
       setIsCleaningWithLLM(false);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -174,6 +190,7 @@ function App() {
     setError(null);
     setRawText(null);
     setCleanedText(null);
+    setDialogue(null);
     setIsProcessing(true);
     setIsCleaningWithLLM(false);
 
@@ -211,6 +228,7 @@ function App() {
         setError(null);
         setRawText(null);
         setCleanedText(null);
+        setDialogue(null);
         setIsProcessing(true);
         setIsCleaningWithLLM(false);
 
@@ -239,7 +257,20 @@ function App() {
           const cleanData = (await cleanResponse.json()) as CleanResponse;
 
           if (cleanData.success && cleanData.text) {
-            setCleanedText(cleanData.text);
+            try {
+              const cleaned = cleanData.text
+                .replace(/^```(?:json)?\s*|\s*```$/g, '')
+                .trim();
+              const parsed = JSON.parse(cleaned) as Record<string, unknown>;
+              if (Array.isArray(parsed.dialogue)) {
+                setDialogue(parsed.dialogue as DialogueEntry[]);
+              }
+              const { dialogue: _, ...rest } = parsed;
+              setCleanedText(JSON.stringify(rest, null, 2));
+            } catch {
+              setCleanedText(cleanData.text);
+              setDialogue(null);
+            }
           }
 
           setIsCleaningWithLLM(false);
@@ -347,6 +378,7 @@ function App() {
         <TranscriptionResults
           rawText={rawText}
           cleanedText={cleanedText}
+          dialogue={dialogue}
           useLLM={useLLM}
           isCopied={isCopied}
           isCleaningWithLLM={isCleaningWithLLM}

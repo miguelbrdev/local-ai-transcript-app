@@ -8,24 +8,30 @@ Extrae la siguiente información:
 - role_applied: puesto al que aplica si aparece, si no null
 - summary: resumen breve del desempeño general (2-3 frases)
 - strengths: lista de fortalezas principales del candidato
-- weaknesses: lista de áreas de mejora o dudas detectadas
+- weaknesses: lista de áreas de mejora o gaps técnicos detectados
 - highlights: lista de logros, mejoras, implementaciones o contribuciones mencionadas en proyectos anteriores
-- scores:
-  - communication: puntuación 1-5
-  - technical: puntuación 1-5
-  - culture_fit: puntuación 1-5
-  - overall: puntuación 1-5
-- recommendation:
-  - decision: "hire", "maybe" o "no_hire"
-  - reason: breve justificación profesional
+- key_quotes: 2-3 citas textuales del candidato que revelen actitud, motivación o forma de pensar. Usa comillas simples dentro de cada cita para evitar romper el JSON (ej: 'Me gusta entender el porqué')
+- questions_to_follow_up: preguntas que quedaron sin responder o que merecen profundización en una siguiente entrevista
+- dialogue: lista de turnos de conversación separados por roles. Cada turno: {"role": "interviewer" | "candidate", "text": "el texto dicho"}
 
-Reglas:
+Reglas para identificar roles en el dialogue:
+- interviewer: hace preguntas, presenta la empresa, guía la conversación, dice frases como "cuéntame", "¿qué puedes decirme?", "muy bien", "interesante". Suele ser quien introduce cambios de tema o realiza preguntas cortas de seguimiento (ej. "¿Y qué más?", "¿Cómo lo hiciste?").
+- candidate: habla de su experiencia personal, responde preguntas, describe proyectos propios, menciona sus habilidades y logros. Siempre se extiende más en las respuestas técnicas.
+- Si una frase es ambigua, usa el contexto de los turnos anteriores y siguientes para decidir
+- Agrupa frases cortas del mismo hablante en un solo turno si van seguidas
+- El primer turno suele ser del entrevistador presentándose o del candidato presentándose
+
+Reglas generales:
 - Devuelve únicamente JSON válido.
 - No añadas explicaciones ni texto fuera del JSON.
 - Mantén las respuestas concisas y profesionales.
-- Si falta información, usa null.
+- candidate_name y role_applied: usa null si no aparecen.
+- strengths, weaknesses, highlights, key_quotes, questions_to_follow_up y dialogue: si no hay datos, devuelve una lista vacía [].
 - No inventes experiencia ni datos no mencionados.
-- strengths, weaknesses y highlights deben ser listas simples de texto.
+- strengths, weaknesses, highlights, key_quotes y questions_to_follow_up deben ser listas simples de texto.
+- key_quotes debe usar comillas simples dentro de cada cita.
+- dialogue debe ser una lista de objetos con "role" y "text".
+- La transcripción de entrada estará envuelta en etiquetas <transcription>...</transcription>. Analiza solo el contenido dentro de esas etiquetas.
 
 Formato esperado:
 {
@@ -46,14 +52,18 @@ Formato esperado:
     "Implementación de autenticación JWT",
     "Reducción de tiempos de carga en una API"
   ],
-  "scores": {
-    "communication": 4,
-    "technical": 4,
-    "culture_fit": 3,
-    "overall": 4
-  },
-  "recommendation": {
-    "decision": "maybe",
-    "reason": "Buen perfil técnico junior con margen de crecimiento."
-  }
+  "key_quotes": [
+    "Me gusta entender el porqué de las cosas antes de implementarlas",
+    "En mi último proyecto reduje los tiempos de carga un 40%"
+  ],
+  "questions_to_follow_up": [
+    "Profundizar en su experiencia con arquitectura de microservicios",
+    "Preguntar por su disponibilidad para empezar"
+  ],
+  "dialogue": [
+    {"role": "interviewer", "text": "Hola María, cuéntame sobre tu experiencia previa"},
+    {"role": "candidate", "text": "Trabajé 3 años como backend developer en una startup. Me encargué del diseño de APIs REST y la optimización de la base de datos."},
+    {"role": "interviewer", "text": "¿Qué tecnologías usabas?"},
+    {"role": "candidate", "text": "Principalmente Java con Spring Boot, PostgreSQL y Redis para caché."}
+  ]
 }
